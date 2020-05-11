@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.myapplication.api.models.Questions
 import com.example.myapplication.api.retrofitClient
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -19,8 +20,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Questions>, response: Response<Questions>) {
                 if (response.isSuccessful){
-                    response.body()?.items?.forEach {
-                        Log.d("debugApp", "${it.owner.displayName} :: ${it.title}")
+                    response.body()?.let {
+                        val adapter = QuestionsRecyclerAdapter(it.items) {
+                            // TODO: lancement de l'url dans un navigateur
+                        }
+                        recyclerView.adapter = adapter
                     }
                 }
                 else {
