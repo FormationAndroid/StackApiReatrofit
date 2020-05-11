@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,9 +22,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Questions>, response: Response<Questions>) {
                 if (response.isSuccessful){
-                    response.body()?.let {
-                        val adapter = QuestionsRecyclerAdapter(it.items) {
-                            // TODO: lancement de l'url dans un navigateur
+                    response.body()?.let { questions ->
+                        val adapter = QuestionsRecyclerAdapter(questions.items) { item ->
+                            val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+                            startActivity(browseIntent)
                         }
                         recyclerView.adapter = adapter
                     }
